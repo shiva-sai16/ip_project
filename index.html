@@ -1,287 +1,65 @@
-import React, { useState, useMemo } from 'react';
-import { Mail, Wallet, CheckCircle, XCircle, AlertTriangle, Vote, User, BarChart2 } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decentralized Voting System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>Decentralized Voting System</h1>
+      <p>Secure, Transparent, and Verifiable Elections (Simulation)</p>
+    </header>
 
-// --- Candidate Data ---
-// In a real dApp, this might be loaded from the smart contract
-const initialCandidates = [
-  { id: 1, name: 'Alice Johnson', party: 'Innovate Party' },
-  { id: 2, name: 'Bob Smith', party: 'Future Forward' },
-  { id: 3, name: 'Carolyna Martinez', party: 'Unity Alliance' },
-];
-
-/**
- * Main Application Component
- * This simulates the entire Decentralized Voting dApp.
- */
-export default function App() {
-  // --- React State ---
-  const [account, setAccount] = useState(null); // Stores the user's wallet address
-  const [isLoading, setIsLoading] = useState(false); // For loading states (e.g., "connecting", "voting")
-  const [error, setError] = useState(null); // To display error messages
-  const [hasVoted, setHasVoted] = useState(false); // Tracks if the connected wallet has voted
-  
-  // Stores candidate info and vote counts. In a real app, this would be fetched from the contract.
-  const [candidates, setCandidates] = useState(
-    initialCandidates.map(c => ({ ...c, votes: 0 }))
-  );
-  const [showResults, setShowResults] = useState(false); // To toggle between voting and results
-
-  // --- Mock Web3 Functions ---
-  // These functions simulate interactions with a blockchain.
-
-  /**
-   * Simulates connecting to a user's crypto wallet (e.g., MetaMask).
-   */
-  const connectWallet = () => {
-    setIsLoading(true);
-    setError(null);
-    console.log("Simulating wallet connection...");
-
-    // Simulate the async nature of a wallet connection
-    setTimeout(() => {
-      // In a real app, you'd check for `window.ethereum`
-      const isMetaMaskAvailable = Math.random() > 0.1; // 90% chance of "success"
-
-      if (isMetaMaskAvailable) {
-        // Generate a mock wallet address
-        const mockAccount = '0x' + [...Array(40)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-        setAccount(mockAccount);
-        console.log("Wallet connected:", mockAccount);
-      } else {
-        setError("MetaMask not found. Please install the browser extension.");
-        console.error("MetaMask not found.");
-      }
-      setIsLoading(false);
-    }, 1500);
-  };
-
-  /**
-   * Simulates disconnecting the wallet.
-   */
-  const disconnectWallet = () => {
-    setAccount(null);
-    setHasVoted(false); // Reset vote status on disconnect
-    console.log("Wallet disconnected.");
-  };
-
-  /**
-   * Simulates casting a vote.
-   * @param {number} candidateId The ID of the candidate to vote for.
-   */
-  const castVote = (candidateId) => {
-    setIsLoading(true);
-    setError(null);
-    console.log(`Simulating vote for candidate ${candidateId}...`);
-
-    // Simulate the time it takes for a transaction to be mined
-    setTimeout(() => {
-      // In a real app, this would send a transaction to the smart contract
-      setCandidates(prevCandidates =>
-        prevCandidates.map(c =>
-          c.id === candidateId ? { ...c, votes: c.votes + 1 } : c
-        )
-      );
-      setHasVoted(true);
-      setIsLoading(false);
-      setShowResults(true); // Automatically show results after voting
-      console.log("Vote cast successfully!");
-    }, 2000);
-  };
-  
-  // --- Render Components ---
-
-  // Renders the wallet connection button or connected status
-  const WalletConnect = () => (
-    <div className="w-full max-w-md">
-      {account ? (
-        <div className="p-4 bg-gray-800 rounded-lg flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <CheckCircle className="text-green-500" />
-            <span className="text-sm font-mono">{`${account.substring(0, 6)}...${account.substring(38)}`}</span>
-          </div>
-          <button
-            onClick={disconnectWallet}
-            className="text-sm text-red-400 hover:text-red-300 transition-colors"
-          >
-            Disconnect
-          </button>
-        </div>
-      ) : (
-        <button
-          onClick={connectWallet}
-          disabled={isLoading}
-          className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          ) : (
-            <Wallet />
-          )}
-          <span>{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
-        </button>
-      )}
-    </div>
-  );
-
-  // Renders the voting booth UI
-  const VotingBooth = () => {
-    if (hasVoted) {
-      return (
-        <div className="p-8 bg-gray-800 rounded-lg text-center">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold mb-2">Vote Cast Successfully!</h3>
-          <p className="text-gray-400">Your vote is being securely recorded on the blockchain.</p>
-          <button
-            onClick={() => setShowResults(true)}
-            className="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors"
-          >
-            View Live Results
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <div className="p-8 bg-gray-800 rounded-lg">
-        <h3 className="text-2xl font-bold mb-6 text-center">Cast Your Vote</h3>
-        <div className="space-y-4">
-          {candidates.map(candidate => (
-            <div
-              key={candidate.id}
-              className="p-4 bg-gray-700 rounded-lg flex items-center justify-between space-x-4"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
-                  <User className="text-gray-400" />
-                </div>
-                <div>
-                  <p className="font-semibold">{candidate.name}</p>
-                  <p className="text-sm text-gray-400">{candidate.party}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => castVote(candidate.id)}
-                disabled={isLoading}
-                className="px-5 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:bg-gray-500"
-              >
-                {isLoading ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                ) : (
-                  <Vote className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-  
-  // Calculate total votes for percentage
-  const totalVotes = useMemo(() => {
-    return candidates.reduce((acc, c) => acc + c.votes, 0);
-  }, [candidates]);
-
-  // Renders the live results UI
-  const LiveResults = () => (
-    <div className="p-8 bg-gray-800 rounded-lg">
-      <h3 className="text-2xl font-bold mb-6 text-center">Live Results</h3>
-      <div className="space-y-5">
-        {candidates
-          .sort((a, b) => b.votes - a.votes) // Sort by most votes
-          .map(candidate => {
-            const percentage = totalVotes === 0 ? 0 : ((candidate.votes / totalVotes) * 100).toFixed(1);
-            return (
-              <div key={candidate.id}>
-                <div className="flex justify-between items-baseline mb-1">
-                  <span className="font-semibold">{candidate.name}</span>
-                  <span className="text-sm font-bold text-gray-300">
-                    {candidate.votes} {candidate.votes === 1 ? 'Vote' : 'Votes'} ({percentage}%)
-                  </span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2.5">
-                  <div
-                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${percentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            );
-          })}
-      </div>
-      <p className="text-center text-sm text-gray-400 mt-6">
-        Total Votes Cast: <span className="font-bold">{totalVotes}</span>
-      </p>
-    </div>
-  );
-
-  // --- Main Render ---
-  return (
-    <div className="min-h-screen bg-gray-900 text-white font-sans p-6 md:p-12">
-      <div className="container mx-auto max-w-5xl">
-        
-        {/* Header */}
-        <header className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-2">
-            Decentralized Voting System
-          </h1>
-          <p className="text-lg text-gray-400">
-            Secure, Transparent, and Verifiable Elections on the Blockchain.
-          </p>
-        </header>
-
-        {/* Wallet Connection */}
-        <div className="flex justify-center mb-10">
-          <WalletConnect />
-        </div>
-        
-        {/* Error Message */}
-        {error && (
-          <div className="max-w-md mx-auto mb-6 p-4 bg-red-800 border border-red-700 rounded-lg flex items-center space-x-3">
-            <AlertTriangle className="text-red-300" />
-            <p className="text-red-100 text-sm">{error}</p>
-          </div>
-        )}
-
-        {/* Main Content Area */}
-        <main>
-          {!account ? (
-            <div className="text-center p-8 bg-gray-800 rounded-lg max-w-md mx-auto">
-              <h2 className="text-2xl font-bold mb-4">Welcome, Voter!</h2>
-              <p className="text-gray-400">Please connect your crypto wallet to participate in the election.</p>
-            </div>
-          ) : (
-            <div>
-              {/* TABS */}
-              <div className="flex justify-center mb-6 border-b border-gray-700">
-                <button
-                  onClick={() => setShowResults(false)}
-                  className={`px-6 py-3 font-semibold ${!showResults ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-500'}`}
-                >
-                  <Vote className="inline-block mr-2" />
-                  Voting Booth
-                </button>
-                <button
-                  onClick={() => setShowResults(true)}
-                  className={`px-6 py-3 font-semibold ${showResults ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-500'}`}
-                >
-                  <BarChart2 className="inline-block mr-2" />
-                  Live Results
-                </button>
-              </div>
-              
-              {/* Conditional Panel */}
-              {showResults ? <LiveResults /> : <VotingBooth />}
-            </div>
-          )}
-        </main>
-        
-        {/* Footer */}
-        <footer className="text-center mt-12 text-gray-500 text-sm">
-          <p>This is a simulated dApp. Transactions are not real.</p>
-        </footer>
-        
+    <!-- Wallet Section -->
+    <div class="wallet-section">
+      <button id="connectWalletBtn" class="btn primary">Connect Wallet</button>
+      <div id="walletInfo" class="wallet-info hidden">
+        <span id="walletAddress"></span>
+        <button id="disconnectBtn" class="btn danger small">Disconnect</button>
       </div>
     </div>
-  );
-}
+
+    <!-- Message Area -->
+    <div id="errorMsg" class="error hidden"></div>
+
+    <!-- Main Content -->
+    <main>
+      <div id="welcome" class="panel">
+        <h2>Welcome, Voter!</h2>
+        <p>Please connect your wallet to participate in the election.</p>
+      </div>
+
+      <div id="votingArea" class="hidden">
+        <div class="tabs">
+          <button id="voteTab" class="tab active">🗳️ Voting Booth</button>
+          <button id="resultsTab" class="tab">📊 Live Results</button>
+        </div>
+
+        <!-- Voting Booth -->
+        <div id="votingBooth" class="panel">
+          <h3>Cast Your Vote</h3>
+          <div id="candidateList"></div>
+        </div>
+
+        <!-- Results -->
+        <div id="liveResults" class="panel hidden">
+          <h3>Live Results</h3>
+          <div id="resultsContainer"></div>
+          <p class="totalVotes">Total Votes Cast: <span id="totalVotes">0</span></p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>This is a simulation. Transactions are not real.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
