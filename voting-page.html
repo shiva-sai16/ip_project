@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cast Your Vote</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="voting-style.css">
+</head>
+<body>
+    <div class="container ballot-container">
+        <h2>Electronic Voting Machine</h2>
+        <p>Welcome, Verified Voter. Please select one candidate to cast your vote. This action is final.</p>
+        
+        <div id="ballot-box">
+            <div class="candidate-card" id="candidate-1">
+                <span class="symbol">🌸</span>
+                <div class="info">
+                    <span class="candidate-name">Priya Sharma</span>
+                    <span class="party-name">Jan Vikas Party (JVP)</span>
+                </div>
+                <button class="btn btn-primary vote-btn" data-candidate="Priya Sharma">Vote</button>
+            </div>
+            
+            <div class="candidate-card" id="candidate-2">
+                <span class="symbol">✋</span>
+                <div class="info">
+                    <span class="candidate-name">Arjun Singh</span>
+                    <span class="party-name">Rashtriya Pragati Dal (RPD)</span>
+                </div>
+                <button class="btn btn-primary vote-btn" data-candidate="Arjun Singh">Vote</button>
+            </div>
+
+            <div class="candidate-card" id="candidate-3">
+                <span class="symbol">🚲</span>
+                <div class="info">
+                    <span class="candidate-name">Sameer Khan</span>
+                    <span class="party-name">Lok Samman Morcha (LSM)</span>
+                </div>
+                <button class="btn btn-primary vote-btn" data-candidate="Sameer Khan">Vote</button>
+            </div>
+
+            <div class="candidate-card" id="candidate-4">
+                <span class="symbol">⭐️</span>
+                <div class="info">
+                    <span class="candidate-name">Ananya Reddy</span>
+                    <span class="party-name">Nav Bharat Aghadi (NBA)</span>
+                </div>
+                <button class="btn btn-primary vote-btn" data-candidate="Ananya Reddy">Vote</button>
+            </div>
+
+            <div class="candidate-card" id="candidate-nota">
+                <span class="symbol">🚫</span>
+                <div class="info">
+                    <span class="candidate-name">None of the Above</span>
+                    <span class="party-name">NOTA</span>
+                </div>
+                <button class="btn btn-secondary vote-btn" data-candidate="NOTA">Vote</button>
+            </div>
+        </div>
+
+        <div id="confirmation-message" class="message success hidden">
+            Thank you! Your vote has been securely cast.
+        </div>
+    </div>
+    
+    <script src="voting-script.js"></script>
+</body>
+</html>
