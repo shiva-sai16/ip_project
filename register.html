@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Voting System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Create Your Account</h2>
+        
+        <div id="message-container" class="message hidden"></div>
+        
+        <form id="register-form">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Full Address</label>
+                <input type="text" id="address" required>
+            </div>
+            <div class="form-group">
+                <label for="aadhar">Aadhar Number (12 Digits)</label>
+                <input type="text" id="aadhar" pattern="\d{12}" title="Must be 12 digits" required>
+            </div>
+            <div class="form-group">
+                <label for="voterid">Voter ID (e.g., ABC1234567)</label>
+                <input type="text" id="voterid" pattern="[A-Z]{3}\d{7}" title="Must be 3 letters followed by 7 numbers" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+        </form>
+        <p style="margin-top: 1.5rem; font-size: 0.9rem;">Already have an account? <a href="login.html">Sign In</a></p>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get values from the form
+            const userDetails = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                aadhar: document.getElementById('aadhar').value,
+                voterid: document.getElementById('voterid').value
+            };
+
+            // --- SIMULATION ---
+            // In a real app, you'd send this to a server.
+            // Here, we save it to the browser's local storage.
+            localStorage.setItem('voter-details', JSON.stringify(userDetails));
+
+            // Show a success message
+            const msgBox = document.getElementById('message-container');
+            msgBox.textContent = 'Registration Successful! You will be redirected to Sign In.';
+            msgBox.className = 'message success'; // Make it visible
+            
+            // Redirect to login page after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
