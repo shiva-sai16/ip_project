@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Voting System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Sign In to Vote</h2>
+        
+        <div id="message-container" class="message hidden"></div>
+
+        <form id="step1-aadhar" class="login-step">
+            <p>Please enter your Aadhar number to begin.</p>
+            <div class="form-group">
+                <label for="aadhar">Aadhar Number</label>
+                <input type="text" id="aadhar" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Get Aadhar OTP</button>
+        </form>
+
+        <form id="step2-aadhar-otp" class="login-step hidden">
+            <p>An OTP has been sent to the mobile number linked with your Aadhar.</p>
+            <div class="form-group">
+                <label for="aadhar-otp">Enter 6-Digit OTP</label>
+                <input type="text" id="aadhar-otp" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Verify Aadhar OTP</button>
+        </form>
+
+        <form id="step3-voterid" class="login-step hidden">
+            <p>Aadhar verified. Now, please enter your Voter ID.</p>
+            <div class="form-group">
+                <label for="voterid">Voter ID Number</label>
+                <input type="text" id="voterid" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Get Voter OTP</button>
+        </form>
+
+        <form id="step4-voter-otp" class="login-step hidden">
+            <p>An OTP has been sent to the mobile number linked with your Voter ID.</p>
+            <div class="form-group">
+                <label for="voter-otp">Enter 6-Digit OTP</label>
+                <input type="text" id="voter-otp" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Verify & Vote</button>
+        </form>
+    </div>
+
+    <script>
+        // --- SIMULATION ---
+        // In a real app, this data would come from a secure server.
+        // We get the "database" record from local storage.
+        const storedUser = JSON.parse(localStorage.getItem('voter-details'));
+        const DUMMY_OTP = "123456"; // For simulation
+
+        const step1 = document.getElementById('step1-aadhar');
+        const step2 = document.getElementById('step2-aadhar-otp');
+        const step3 = document.getElementById('step3-voterid');
+        const step4 = document.getElementById('step4-voter-otp');
+        const msgBox = document.getElementById('message-container');
+
+        function showMessage(type, text) {
+            msgBox.textContent = text;
+            msgBox.className = `message ${type}`;
+        }
+
+        // --- Step 1 Handler (Aadhar) ---
+        step1.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const aadharInput = document.getElementById('aadhar').value;
+            
+            if (!storedUser || storedUser.aadhar !== aadharInput) {
+                showMessage('error', 'Aadhar number not found in our records. Please register first.');
+            } else {
+                showMessage('success', 'Aadhar found. Sending OTP...');
+                setTimeout(() => {
+                    step1.classList.add('hidden');
+                    step2.classList.remove('hidden');
+                    msgBox.className = 'message hidden';
+                }, 1500);
+            }
+        });
+
+        // --- Step 2 Handler (Aadhar OTP) ---
+        step2.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const otpInput = document.getElementById('aadhar-otp').value;
+
+            if (otpInput !== DUMMY_OTP) {
+                showMessage('error', 'Invalid OTP. Please try again.');
+            } else {
+                showMessage('success', 'OTP Verified!');
+                setTimeout(() => {
+                    step2.classList.add('hidden');
+                    step3.classList.remove('hidden');
+                    msgBox.className = 'message hidden';
+                }, 1500);
+            }
+        });
+
+        // --- Step 3 Handler (Voter ID) ---
+        step3.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const voterIdInput = document.getElementById('voterid').value;
+
+            if (storedUser.voterid !== voterIdInput) {
+                showMessage('error', 'Voter ID does not match Aadhar record.');
+            } else {
+                showMessage('success', 'Voter ID confirmed. Sending final OTP...');
+                setTimeout(() => {
+                    step3.classList.add('hidden');
+                    step4.classList.remove('hidden');
+                    msgBox.className = 'message hidden';
+                }, 1500);
+            }
+        });
+
+        // --- Step 4 Handler (Voter OTP) ---
+        step4.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const otpInput = document.getElementById('voter-otp').value;
+
+            if (otpInput !== DUMMY_OTP) {
+                showMessage('error', 'Invalid OTP. Please try again.');
+            } else {
+                showMessage('success', 'All verifications complete! Redirecting to voting booth...');
+                // In a real app, you'd create a secure session token
+                // and redirect to the React voting app.
+                setTimeout(() => {
+                    // We'll just alert for now.
+                    alert("SUCCESS! You are now authenticated and can proceed to vote.");
+                    // window.location.href = 'voting-page.html'; // This would be the next step
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
