@@ -50,3 +50,42 @@
     background-color: #2e7d32; /* Green */
     color: white;
 }
+
+/* === ADD THESE LINES TO voting-style.css === */
+
+.results-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    background-color: #fff;
+}
+
+.results-card .info {
+    flex-grow: 1;
+    margin-left: 1.5rem;
+}
+
+.results-card .symbol {
+    font-size: 2rem;
+}
+
+.results-card .party-name {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.results-card .vote-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a237e;
+    min-width: 50px;
+    text-align: right;
+}
+
+.hidden {
+    display: none;
+}
