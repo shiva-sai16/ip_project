@@ -1,0 +1,52 @@
+/* Save this as voting-style.css */
+.ballot-container {
+    max-width: 700px;
+}
+
+.candidate-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    background-color: #fafafa;
+    transition: box-shadow 0.3s ease;
+}
+
+.candidate-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.candidate-card .symbol {
+    font-size: 2.5rem;
+    margin-right: 1.5rem;
+}
+
+.candidate-card .info {
+    flex-grow: 1;
+}
+
+.candidate-card .candidate-name {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #222;
+}
+
+.candidate-card .party-name {
+    display: block;
+    font-size: 1rem;
+    color: #555;
+}
+
+.vote-btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.vote-btn.selected {
+    background-color: #2e7d32; /* Green */
+    color: white;
+}
