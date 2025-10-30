@@ -119,6 +119,7 @@
         });
 
         // --- Step 4 Handler (Voter OTP) ---
+        // --- Step 4 Handler (Voter OTP) ---
         step4.addEventListener('submit', function(e) {
             e.preventDefault();
             const otpInput = document.getElementById('voter-otp').value;
@@ -127,12 +128,12 @@
                 showMessage('error', 'Invalid OTP. Please try again.');
             } else {
                 showMessage('success', 'All verifications complete! Redirecting to voting booth...');
-                // In a real app, you'd create a secure session token
-                // and redirect to the React voting app.
+                // In a real app, you'd create a secure session token.
+                
+                // --- THIS IS THE CHANGE ---
+                // We now redirect to the new voting page instead of an alert.
                 setTimeout(() => {
-                    // We'll just alert for now.
-                    alert("SUCCESS! You are now authenticated and can proceed to vote.");
-                    // window.location.href = 'voting-page.html'; // This would be the next step
+                    window.location.href = 'voting-page.html';
                 }, 2000);
             }
         });
